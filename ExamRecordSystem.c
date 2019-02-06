@@ -36,16 +36,16 @@ int i,num,count=0;
 	count++;
 	}
 	while((num!=1234)&&(count<3));   //boundary value//
-	if(count<3)
+	if(count<=3)
 	{
 		system("cls");
 		printf("Welcome");
 	}
-	else if(count<3)
+	else if(count<=3)
 	{
 		printf("Invalid login attempt");
 	}
-	choice();
+
 
 }
 
@@ -78,8 +78,7 @@ int i,num,count=0;
                 printf("\nEnter records");
                 break;
             }
-
-              case 2:
+            case 2:
             {
                 printf("\nShow Data");
                 break;
@@ -99,12 +98,14 @@ int i,num,count=0;
     {
         printf("\nEnter the id no of student: ");
         scanf("%d",&id);
-        printf("\nEnter the name of student: ");
-        name=getch();
+
+
     }
 
     void getdata()
     {
+         printf("\nEnter the name of student: ");
+        scanf(" %c",&name);
 
         printf("\nEnter the marks obtained in Science: ");
         scanf("%d",&s_marks);
