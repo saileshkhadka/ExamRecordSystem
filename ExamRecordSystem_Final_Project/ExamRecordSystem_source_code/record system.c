@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
-#include<windows.h>
+
 
 struct Data
 {
@@ -12,6 +12,9 @@ struct Data
 }save_d[50],read_d[50];
 
 
+//***************************************************************
+//                   FUNCTION USED IN PROJECT
+//****************************************************************
 
 void getdata();
 void read_data();
@@ -24,13 +27,14 @@ void deletedata();
 //                   DECLARATION OF VARIABLES IN PROJECT
 //****************************************************************
     int id,s_marks,e_marks,m_marks,n_marks;
+    int i=0;
     char name[20],address,grade;
     float percentage;
     FILE *fptr;
-//***************************************************************
-//                   FUNCTION USED IN PROJECT
-//****************************************************************
-void login() //login//
+
+
+//username and password//
+void login()  //login//
 {
     int num,count=0;
 	do
@@ -70,8 +74,8 @@ void option() //option for the user//
     int n;
     printf("\nPress 1 to enter record of student\n");
     printf("Press 2 to show all data from file\n");
-    printf("Press 3 to search records from file\n");
-    printf("Press 4 to delete records from file\n");
+    printf("Press 3 to search existing student\n");
+    printf("Press 4 to delete data from file\n");
     printf("Press 5 to exit\n");
     printf("Enter you choice : ");
     scanf("%d",&choice);
@@ -104,7 +108,8 @@ void option() //option for the user//
                 exit(0);
                 break;
             }
-            default:
+
+        default:
             {
                 case_default();
                 break;
@@ -145,7 +150,7 @@ void getdata() //takes the input of the student//
             scanf("%c",&record);
             if(record=='Y' || record=='y')
             {
-                FILE*fptr = fopen("record.txt","a");
+                FILE*fptr = fopen("info.txt","w");
                 printf("\n");
                 printf("----------------------------------------\n");
                 printf("\nEnter the id no of student:");
@@ -169,7 +174,7 @@ void getdata() //takes the input of the student//
                 scanf("%d",&n_marks);
                 fprintf(fptr,"%d\t",n_marks);
                 printf("\n");
-                printf("\-----------------------------------\n");
+                printf("-----------------------------------\n");
                 percentage=s_marks+e_marks+m_marks+n_marks/400;
                 if(percentage>=60)
                 {
@@ -193,7 +198,7 @@ void getdata() //takes the input of the student//
                fprintf(fptr,"%c\n",grade);
                i++;
             }
-            else
+            else if (record=='N' || record=='n')
             {
                 option();
             }
@@ -211,7 +216,7 @@ void read_data() //read the data from the file//
 int id;
 int i=0;
 char ch;
-fptr = fopen("record.txt","r");
+fptr = fopen("info.txt","r");
 printf("\n");
 do
 {
@@ -230,7 +235,7 @@ do
 
 }while(!feof(fptr));
 fflush(stdin);
-printf("Do you want to exit(yes) or go to option(no)? ");
+printf("\nDo you want to exit(yes) or go to option(no)? ");
 scanf("%c",&ch);
 if(ch=='y' || ch=='Y')
 {
@@ -242,9 +247,11 @@ else
 }
 fclose(fptr);
 }
+
 void searchdata()
 {
     int i=0,j=0;
+    char ch;
     fptr = fopen("info.txt","r");
     printf("Enter student ID : ");
     scanf("%d",&id);
@@ -257,7 +264,7 @@ void searchdata()
         fscanf(fptr,"%d\t%s\t%d\t%d\t%d\t%d\t%c\n",&save_d[i].id,&save_d[i].name,&save_d[i].s_marks,&save_d[i].e_marks,&save_d[i].m_marks,&save_d[i].n_marks,&save_d[i].grade);
         if(save_d[i].id==id)
     {
-        printf("ID: %d           RESULT",save_d[i].id);
+        printf("ID: %d \t\t RESULT",save_d[i].id);
         printf("\nName: %s",save_d[i].name);
         printf("\nScience : %d",save_d[i].s_marks);
         if(save_d[i].s_marks>=32)
@@ -299,7 +306,7 @@ void searchdata()
         j++;
         break;
     }
-    else if(id==NULL)
+    else if(id=='NULL')
     {
         printf("**Error finding file**");
     }
@@ -308,34 +315,17 @@ void searchdata()
     }
 
     }while(!feof(fptr));
-    fclose(fptr);
-
-
-}
-
-void deletedata()
+    fflush(stdin);
+printf("\nDo you want to exit(yes) or go to option(no)? ");
+scanf("%c",ch);
+if(ch=='y' || ch=='Y')
 {
-
-    fptr = fopen("record.txt","w");
-    printf("\n");
-    system("cls");
-	int id;
-	char fname[20];
-	printf("\nEnter the file name:");
-    scanf("%s",fname);
-	id=remove(fname);
-	if(id!=0)
-	{
-		printf("File %s deleted successfully..!!\n",fname);
-	}
-	else
-	{
-		printf("Unable to delete file record %s\n",fname);
-		perror("Error Message ");
-	}
-	getch();
-
-
+    exit(0);
+}
+else
+{
+    option();
+}
     fclose(fptr);
 
 
@@ -343,11 +333,11 @@ void deletedata()
 
 void showdata() //show the entered data//
 {
-    FILE*fptr = fopen("record.txt","a");
+    FILE*fptr = fopen("info.txt","a");
     printf("**You have entered these values***\n");
     printf("------------------------------------\n");
     printf("ID of a student: %d\n",id);
-    printf("Name of a student: %s\t\t RESULT",name);
+    printf("Name of a student: %s \t\t RESULT",name);
     printf("\nMarks obtained in Science: %d",s_marks);
     if(s_marks>=32)
         {
@@ -388,8 +378,47 @@ void showdata() //show the entered data//
     printf("***Successful to write in file***");
         //i++;
 }
-clrscr();
+
+void deletedata()
+{
+    char ch;
+    fptr = fopen("info.txt","w");
+    printf("\n");
+    system("cls");
+	int id;
+	char fname[20];
+	printf("\nEnter the file name:");
+    scanf("%s",fname);
+	id=remove(fname);
+	if(id!=0)
+	{
+		printf("File %s deleted successfully..!!\n",fname);
+	}
+	else
+	{
+		printf("Unable to delete file record %s\n",fname);
+		perror("Error Message ");
+	}
+	getch();
+fflush(stdin);
+printf("\nDo you want to exit(yes) or go to option(no)? ");
+scanf("%c",&ch);
+if(ch=='y' || ch=='Y')
+{
+    exit(0);
+}
+else
+{
+    option();
+}
+
+    fclose(fptr);
+}
+
+
+
+
 main()
 {
-    login();
+   login();
 }
